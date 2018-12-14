@@ -1,11 +1,15 @@
 package br.com.petland.pet;
 
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
 public class Pet {
 
-	public Pet(){}
-	
-	public Pet(int id, String name, int age, String sex) {
-		// TODO Auto-generated constructor stub
-	}
+	private int id;
+	private String name;
+	private int age;
+	private String sex;	
 
 }

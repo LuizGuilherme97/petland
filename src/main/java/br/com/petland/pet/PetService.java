@@ -2,15 +2,15 @@ package br.com.petland.pet;
 
 public class PetService {
 
-	private PetDataRepository repository;
+	private DataRepository<Pet> repository;
 	
-	public PetService(PetDataRepository repository) {
+	public PetService(DataRepository<Pet> repository) {
 		this.repository = repository;
 	}
 	
 	public Pet getPet(int id) {
 		// TODO Auto-generated method stub
-		return repository.getPet(id);
+		return repository.getById(id);
 	}
 
 }
