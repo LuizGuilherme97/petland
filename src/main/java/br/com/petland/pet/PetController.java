@@ -9,7 +9,7 @@ public class PetController {
 		this.petService =  petService;
 	}
 
-	public Pet getPet(int id) {
+	public Pet getPet(Long id) {
 		// TODO Auto-generated method stub
 		return this.petService.getPet(id);
 	}

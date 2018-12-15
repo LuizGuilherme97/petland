@@ -8,7 +8,7 @@ public class PetService {
 		this.repository = repository;
 	}
 	
-	public Pet getPet(int id) {
+	public Pet getPet(Long id) {
 		// TODO Auto-generated method stub
 		return repository.getById(id);
 	}
