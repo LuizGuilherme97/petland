@@ -1,24 +1,35 @@
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.mongodb.ServerAddress;
 
 import br.com.petland.pet.Pet;
+import de.bwaldvogel.mongo.MongoServer;
+import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 import xyz.morphia.Datastore;
 import xyz.morphia.Key;
 import xyz.morphia.Morphia;
 
 public class RepositoryHelper {
 
-    private MongoClient mongoClient;
-    private Morphia morphia;
 	private Datastore datastore;
+    private MongoServer server;
+    private MongoClient mongoClient;
 
-    public RepositoryHelper(Datastore datastore){
+    public RepositoryHelper(){
+        Morphia morphia = new Morphia();
+
+		server = new MongoServer(new MemoryBackend());
+		ServerAddress serverAddress = new ServerAddress(server.bind());
+
+        morphia.mapPackage("br.com.petland");
+
+        mongoClient = new MongoClient(serverAddress);
+        Datastore datastore = morphia.createDatastore(mongoClient, "integration_test");
+		datastore.ensureIndexes();
         this.datastore = datastore;
+    }
+
+    public Datastore getDataStore() {
+        return this.datastore;
     }
 
     public Key<Pet> insertPet(Pet pet){
@@ -29,7 +40,8 @@ public class RepositoryHelper {
         datastore.delete(pet);        
     }
 
-    public void closeConnection() {
-        // mongoClient.close();
+    public void shutdown() {
+        server.shutdown();
+        mongoClient.close();
     }
 }
