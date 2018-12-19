@@ -6,10 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.petland.pet.Pet;
-import br.com.petland.pet.PetDataReposiory;
+import br.com.petland.pet.PetDataRepository;
 import br.com.petland.pet.PetService;
 
-public class PetServicetIT {
+public class PetServiceIT {
 	
 	private RepositoryHelper repositoryHelper;
 	private PetService service;
@@ -17,7 +17,7 @@ public class PetServicetIT {
 	@Before
     public void setUp() {
 		repositoryHelper = new RepositoryHelper();
-		service = new PetService(new PetDataReposiory(repositoryHelper.getDataStore()));
+		service = new PetService(new PetDataRepository(repositoryHelper.getDataStore()));
     }
 
     @After

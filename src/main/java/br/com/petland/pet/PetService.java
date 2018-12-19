@@ -7,6 +7,10 @@ public class PetService {
 	public PetService(DataRepository<Pet> repository) {
 		this.repository = repository;
 	}
+
+	public PetService() {
+		this.repository = new PetDataRepository();
+	}
 	
 	public Pet getPet(Long id) {
 		// TODO Auto-generated method stub
