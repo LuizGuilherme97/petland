@@ -32,16 +32,34 @@ sourceSets {
         }
         resources.srcDir file('src/integration-test/resources')
     }
+
+    functionalTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/functional-test/java')
+        }
+        resources.srcDir file('src/functional-test/resources')
+    }
 }
 
 configurations {
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
+    functionalTestCompile.extendsFrom testCompile
+    functionalTestRuntime.extendsFrom testRuntime
 }
 
 task integrationTest(type: Test) {
+    description = 'Runs the integration tests.'
+    group = 'verification'
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+task functionalTest(type: Test) {
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
 dependencies {
@@ -53,8 +71,11 @@ dependencies {
   compileOnly 'org.projectlombok:lombok:1.18.4'
   apt 'org.projectlombok:lombok:1.18.4'
   testCompile group: 'de.svenkubiak', name: 'embedded-mongodb', version: '4.4.0'
-  testCompile group: 'de.bwaldvogel', name: 'mongo-java-server', version: '1.10.0'
+  compile group: 'de.bwaldvogel', name: 'mongo-java-server', version: '1.10.0'
   compile 'xyz.morphia.morphia:core:1.4.0'
-
-
+  testCompile 'io.rest-assured:rest-assured:3.2.0'
+  compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
+  compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
+  compile group: 'com.google.inject', name: 'guice', version: '4.0'
+  compile group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.26'
 }

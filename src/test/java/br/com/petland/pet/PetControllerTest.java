@@ -4,12 +4,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.junit.Test;
-
-import br.com.petland.pet.DataRepository;
 import br.com.petland.pet.Pet;
 import br.com.petland.pet.PetController;
 import br.com.petland.pet.PetService;

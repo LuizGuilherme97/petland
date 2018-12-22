@@ -1,28 +1,46 @@
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
+import javax.inject.Inject;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.mongodb.ServerAddress;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.petland.PetModule;
+import br.com.petland.PetModuleForTest;
+import br.com.petland.RepositoryHelper;
 import br.com.petland.pet.Pet;
-import br.com.petland.pet.PetDataRepository;
 import br.com.petland.pet.PetService;
+import de.bwaldvogel.mongo.MongoServer;
+import de.bwaldvogel.mongo.backend.memory.MemoryBackend;
 
 public class PetServiceIT {
 	
 	private RepositoryHelper repositoryHelper;
+
+	@Inject
 	private PetService service;
+
+	private MongoServer server;
 
 	@Before
     public void setUp() {
+		Injector injector = Guice.createInjector(new PetModuleForTest());
+		injector.injectMembers(this);
+		server = new MongoServer(new MemoryBackend());
+		server.bind("localhost", 27017);
+		
 		repositoryHelper = new RepositoryHelper();
-		service = new PetService(new PetDataRepository(repositoryHelper.getDataStore()));
     }
 
     @After
     public void tearDown() {
-        repositoryHelper.shutdown();
+        server.shutdown();
     }
 
 	@Test
@@ -31,11 +49,9 @@ public class PetServiceIT {
 		Pet pet = Pet.builder().id(id).name("Luphie").age(12).sex("female").build();
 
 		repositoryHelper.insertPet(pet);
-		
 		assertThat(service.getPet(id), is(pet));
 
-		repositoryHelper.removePet(pet);
-	}
+    }
 
 	@Test
 	public void shouldGetNullWhenPetNotFound() {
@@ -45,6 +61,5 @@ public class PetServiceIT {
 		repositoryHelper.insertPet(pet);
 		
 		assertThat(service.getPet(-1L), is(nullValue()));
-		repositoryHelper.removePet(pet);
 	}
 }

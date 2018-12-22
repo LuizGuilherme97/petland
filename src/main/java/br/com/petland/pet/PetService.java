@@ -1,7 +1,10 @@
 package br.com.petland.pet;
 
+import javax.inject.Inject;
+
 public class PetService {
 
+	@Inject
 	private DataRepository<Pet> repository;
 	
 	public PetService(DataRepository<Pet> repository) {

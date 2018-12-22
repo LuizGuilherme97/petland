@@ -1,3 +1,5 @@
+package br.com.petland;
+
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
@@ -11,18 +13,14 @@ import xyz.morphia.Morphia;
 public class RepositoryHelper {
 
 	private Datastore datastore;
-    private MongoServer server;
     private MongoClient mongoClient;
 
     public RepositoryHelper(){
         Morphia morphia = new Morphia();
 
-		server = new MongoServer(new MemoryBackend());
-		ServerAddress serverAddress = new ServerAddress(server.bind());
-
         morphia.mapPackage("br.com.petland");
 
-        mongoClient = new MongoClient(serverAddress);
+        mongoClient = new MongoClient();
         Datastore datastore = morphia.createDatastore(mongoClient, "integration_test");
 		datastore.ensureIndexes();
         this.datastore = datastore;
@@ -41,7 +39,6 @@ public class RepositoryHelper {
     }
 
     public void shutdown() {
-        server.shutdown();
         mongoClient.close();
     }
 }
