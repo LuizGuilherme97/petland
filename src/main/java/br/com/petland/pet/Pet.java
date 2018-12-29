@@ -1,5 +1,7 @@
 package br.com.petland.pet;
 
+import com.google.gson.Gson;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +19,10 @@ public class Pet {
 	private Long id;
 	private String name;
 	private int age;
-	private String sex;	
+	private String sex;
+
+	public static Object fromJson(String json) {
+		return new Gson().fromJson(json, Pet.class);
+	}	
 
 }

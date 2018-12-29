@@ -1,6 +1,9 @@
 package br.com.petland;
 
-import static spark.Spark.*;
+import static spark.Spark.awaitInitialization;
+import static spark.Spark.get;
+import static spark.Spark.init;
+import static spark.Spark.port;
 
 import javax.inject.Inject;
 
@@ -37,10 +40,9 @@ public class Application {
     }
 
     public void routes() {
-        logger.info("Controller = ", controller.toString());
         get("/pet/:id", (req, res) -> {
-            return controller.getPet(req, res);
-            // return "OK";
+            res.type("application/json");
+            return controller.getPet(req, res).toJson();
         });
     }
 

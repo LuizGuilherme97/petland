@@ -5,6 +5,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 import org.junit.Test;
+
+import br.com.petland.Resource;
 import br.com.petland.pet.Pet;
 import br.com.petland.pet.PetController;
 import br.com.petland.pet.PetService;
@@ -15,12 +17,14 @@ public class PetControllerTest {
 	
 	@Test
 	public void shouldGetPetFromService() {
-		Pet expected = Pet.builder().id(1L).name("Luphie").age(12).sex("female").build();
+		Pet pet = Pet.builder().id(1L).name("Luphie").age(12).sex("female").build();
+		Resource<Pet> expected = Resource.success(pet);
+		
 		PetService service = mock(PetService.class);
 		Request request = mock(Request.class);
 		Response response = mock(Response.class);
 		
-		when(service.getPet(1L)).thenReturn(expected);
+		when(service.getPet(1L)).thenReturn(pet);
 		when(request.params("id")).thenReturn("1");
 		PetController controller = new PetController(service);
 		

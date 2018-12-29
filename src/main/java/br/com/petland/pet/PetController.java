@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.petland.Resource;
 import lombok.NoArgsConstructor;
 import spark.Request;
 import spark.Response;
@@ -20,16 +21,25 @@ public class PetController {
 	private PetService petService;
 	
 	public PetController(PetService petService) {
-		// TODO Auto-generated constructor stub
 		this.petService =  petService;
 	}
 
-	public Pet getPet(Request request, Response response) {
-		// TODO Auto-generated method stub
-		// return this.petService.getPet(id);
+	public Resource<Pet> getPet(Request request, Response response) {
+		
 		logger.info("Get Pet by Id", request);
-		long id = Long.valueOf(request.params("id"));
-		return petService.getPet(id);
+		
+		try {
+			long id = Long.valueOf(request.params("id"));
+			Pet pet = petService.getPet(id);
+	
+			if (pet == null)
+				return Resource.notFound(pet);
+			
+			return Resource.success(pet); 
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+			return Resource.error("Something crazy hapenned. Help!");
+		}
 	}
 
 }
